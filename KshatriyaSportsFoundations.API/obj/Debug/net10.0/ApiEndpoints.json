@@ -1,0 +1,87 @@
+[
+  {
+    "ContainingType": "KshatriyaSportsFoundations.API.Controllers.AuthController",
+    "Method": "Login",
+    "RelativePath": "api/Auth/Login",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "loginRequestDto",
+        "Type": "KshatriyaSportsFoundations.API.Models.Dtos.Auth.LoginRequestDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "KshatriyaSportsFoundations.API.Controllers.AuthController",
+    "Method": "Register",
+    "RelativePath": "api/Auth/RegisterSecret",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "registerUserDto",
+        "Type": "KshatriyaSportsFoundations.API.Models.Dtos.Auth.RegisterUserDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "KshatriyaSportsFoundations.API.Controllers.ContactController",
+    "Method": "SendEnquiry",
+    "RelativePath": "api/Contact/SendEnquiry",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "sendEnquiryRequest",
+        "Type": "KshatriyaSportsFoundations.API.Models.Dtos.Contact.SendEnquiryRequestDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "KshatriyaSportsFoundations.API.Controllers.StudentController",
+    "Method": "SaveStudentDetails",
+    "RelativePath": "api/Student/SaveStudentDetails",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "requestDtos",
+        "Type": "System.Collections.Generic.List\u00601[[KshatriyaSportsFoundations.API.Models.Dtos.Student.StudentDetailsRequestDto, KshatriyaSportsFoundations.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "KshatriyaSportsFoundations.API.Controllers.StudentController",
+    "Method": "GetStudentDetails",
+    "RelativePath": "api/Student/StudentDetails",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "pageNo",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  }
+]
