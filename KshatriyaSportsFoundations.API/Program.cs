@@ -14,7 +14,7 @@ string policyName = "AllowReactOnly";
 builder.Services.AddCors(options => {
     options.AddPolicy(policyName, policy =>
     {
-        policy.WithOrigins("http://localhost:5173")
+        policy.WithOrigins("http://localhost:5173", "https://white-smoke-0f7217000.6.azurestaticapps.net")
         .AllowAnyMethod()
         .AllowAnyHeader();
     });
@@ -72,6 +72,16 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<KshatriyaSportsFoundationsDbContext>();
+    db.Database.Migrate();
+
+    var db1 = scope.ServiceProvider.GetRequiredService<KshatriyaSportsFoundationsAuthDbContext>();
+    db1.Database.Migrate();
+}
+
 app.UseCors(policyName);
 
 // Configure the HTTP request pipeline.
