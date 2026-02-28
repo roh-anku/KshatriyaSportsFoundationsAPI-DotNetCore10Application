@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KshatriyaSportsFoundations.API.Migrations.KshatriyaSportsFoundationsAuthDb
 {
     [DbContext(typeof(KshatriyaSportsFoundationsAuthDbContext))]
-    [Migration("20260228060344_add authentication using windows identitymodel")]
-    partial class addauthenticationusingwindowsidentitymodel
+    [Migration("20260228135314_auth1")]
+    partial class auth1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

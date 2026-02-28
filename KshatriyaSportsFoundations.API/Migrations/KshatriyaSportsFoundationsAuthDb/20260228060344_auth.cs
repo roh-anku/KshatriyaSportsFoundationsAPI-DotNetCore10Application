@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace KshatriyaSportsFoundations.API.Migrations.KshatriyaSportsFoundationsAuthDb
 {
     /// <inheritdoc />
-    public partial class addauthenticationusingwindowsidentitymodel : Migration
+    public partial class auth : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
