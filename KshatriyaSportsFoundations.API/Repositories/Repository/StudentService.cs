@@ -17,7 +17,7 @@ namespace KshatriyaSportsFoundations.API.Repositories.Repository
 
         public async Task<List<EnquiryDomain>> GetStudentDetails(int pageNo = 1, int pageSize = 1000)
         {
-            string sql = "select * from Enquiries;";
+            string sql = "select * FROM Enquiries order by Fullfilled asc, RegistrationDate desc;";
             var studentDetails = await dbConnection.QueryAsync<EnquiryDomain>(sql);
 
             //pagination
