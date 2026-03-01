@@ -14,7 +14,7 @@ string policyName = "AllowReactOnly";
 builder.Services.AddCors(options => {
     options.AddPolicy(policyName, policy =>
     {
-        policy.WithOrigins("http://localhost:5173", "https://white-smoke-0f7217000.6.azurestaticapps.net")
+        policy.WithOrigins("http://localhost:5173", "https://www.kshatriyataekwondo.in")
         .AllowAnyMethod()
         .AllowAnyHeader();
     });
