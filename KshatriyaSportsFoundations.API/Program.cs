@@ -88,8 +88,6 @@ using (var scope = app.Services.CreateScope())
     db1.Database.Migrate();
 }
 
-app.UseCors(policyName);
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -97,6 +95,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors(policyName);
 
 app.UseAuthentication();
 app.UseAuthorization();
