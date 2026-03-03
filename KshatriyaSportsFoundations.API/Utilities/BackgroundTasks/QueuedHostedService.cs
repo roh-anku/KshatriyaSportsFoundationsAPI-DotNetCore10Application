@@ -28,11 +28,25 @@ namespace KshatriyaSportsFoundations.API.Utilities.BackgroundTasks
                 {
                     var workItem = await _taskQueue.DequeueAsync(stoppingToken);
 
-                    await workItem(stoppingToken);
+                    try
+                    {
+                        await workItem(stoppingToken);
+                        _logger.LogInformation("Background work item executed successfully.");
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(ex, "Error occurred executing background work item. Details: {Message}", ex.Message);
+                        _logger.LogError("Stack Trace: {StackTrace}", ex.StackTrace);
+                    }
+                }
+                catch (OperationCanceledException)
+                {
+                    // Expected when cancellation is requested
+                    break;
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, "Error occurred executing background work item.");
+                    _logger.LogError(ex, "Error occurred dequeuing background work item.");
                 }
             }
         }
