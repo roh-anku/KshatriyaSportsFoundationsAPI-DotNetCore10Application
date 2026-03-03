@@ -43,7 +43,7 @@ namespace KshatriyaSportsFoundations.API.Utilities.SendGridEmailSender
             return "Kshatriya Sports Foundations - New Enquiry Received!";
         }
 
-        public static string GetEnquiryEmailContent(string name, string phone, string email, string location)
+        public string GetEnquiryEmailContent(string name, string phone, string email, string location)
         {
             return $@"
                     <!DOCTYPE html>
