@@ -14,9 +14,12 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Logging.ClearProviders();
+
 builder.Logging.AddConsole();
 builder.Logging.AddDebug();
-builder.Logging.SetMinimumLevel(LogLevel.Information);
+builder.Logging.AddAzureWebAppDiagnostics();
+
+builder.Logging.SetMinimumLevel(LogLevel.Information); ;
 
 string policyName = "AllowReactOnly";
 builder.Services.AddCors(options => {
