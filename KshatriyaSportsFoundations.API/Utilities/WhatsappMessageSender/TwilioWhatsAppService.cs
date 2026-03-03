@@ -84,25 +84,24 @@ namespace KshatriyaSportsFoundations.API.Utilities.WhatsappMessageSender
 
         public string GetMessage(string name,string phone,string email,string location,string message)
         {
-            var messageBody = $@"
-                                🥋 *New Taekwondo Enquiry Received!*
+            var whatsappMessage = $"""
+🥋 *New Taekwondo Enquiry Received!*
+━━━━━━━━━━━━━━━━━━
+👤 *Name:* {name}
+📞 *Phone:* {phone}
+📧 *Email:* {email}
+📍 *Location:* {location}
+━━━━━━━━━━━━━━━━━━
 
-                                ━━━━━━━━━━━━━━━━━━
-                                👤 *Name:* {name}
-                                📞 *Phone:* {phone}
-                                📧 *Email:* {email}
-                                📍 *Location:* {location}
-                                ━━━━━━━━━━━━━━━━━━
+💬 *Message:*
+{message}
 
-                                💬 *Message:*
-                                {message}
+━━━━━━━━━━━━━━━━━━
+📅 *Received On:* {DateTime.Now:dd MMM yyyy hh:mm tt}
 
-                                ━━━━━━━━━━━━━━━━━━
-                                📅 Received On: {DateTime.Now:dd MMM yyyy hh:mm tt}
-
-                                🔥 Please respond to the enquiry as soon as possible.
-                                ";
-            return messageBody;
+🔥 Please respond to the enquiry as soon as possible.
+""";
+            return whatsappMessage;
         }
     }
 }
