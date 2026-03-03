@@ -2,7 +2,9 @@ using KshatriyaSportsFoundations.API.Database;
 using KshatriyaSportsFoundations.API.MappingProfiles;
 using KshatriyaSportsFoundations.API.Repositories.Interfaces;
 using KshatriyaSportsFoundations.API.Repositories.Repository;
+using KshatriyaSportsFoundations.API.Utilities.BackgroundTasks;
 using KshatriyaSportsFoundations.API.Utilities.SendGridEmailSender;
+using KshatriyaSportsFoundations.API.Utilities.WhatsappMessageSender;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -36,6 +38,12 @@ builder.Services.AddDbContext<KshatriyaSportsFoundationsAuthDbContext>(options =
 builder.Services.Configure<SendGridSettings>(builder.Configuration.GetSection("SendGrid"));
 builder.Services.AddScoped<IEmailSender,SendGridEmailService>();
 
+builder.Services.Configure<TwilioSettings>(builder.Configuration.GetSection("Twilio"));
+builder.Services.AddScoped<IWhatsAppService, TwilioWhatsAppService>();
+
+//configure background task queue
+builder.Services.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>();
+builder.Services.AddHostedService<QueuedHostedService>();
 
 //inject services
 builder.Services.AddScoped<IContactService, ContactService>();
