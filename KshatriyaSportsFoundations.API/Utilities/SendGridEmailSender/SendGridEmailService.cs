@@ -43,7 +43,7 @@ namespace KshatriyaSportsFoundations.API.Utilities.SendGridEmailSender
             return "Kshatriya Sports Foundations - New Enquiry Received!";
         }
 
-        public string GetEnquiryEmailContent(string name, string phone, string email, string location)
+        public string GetEnquiryEmailContent(string name, string phone, string email, string location, string enquiryMessage)
         {
             return $@"
                     <!DOCTYPE html>
@@ -57,7 +57,7 @@ namespace KshatriyaSportsFoundations.API.Utilities.SendGridEmailSender
 
                         <table align='center' width='100%' cellpadding='0' cellspacing='0' 
                                style='max-width:600px;margin:30px auto;background:#ffffff;border-radius:8px;overflow:hidden;box-shadow:0 4px 10px rgba(0,0,0,0.08);'>
-        
+
                             <!-- Header -->
                             <tr>
                                 <td style='background-color:#1e293b;padding:20px;text-align:center;color:#ffffff;font-size:20px;font-weight:bold;'>
@@ -77,7 +77,7 @@ namespace KshatriyaSportsFoundations.API.Utilities.SendGridEmailSender
 
                                     <table width='100%' cellpadding='10' cellspacing='0' 
                                            style='margin-top:15px;border-collapse:collapse;font-size:14px;'>
-                    
+
                                         <tr style='background-color:#f8fafc;'>
                                             <td style='font-weight:bold;width:35%;border:1px solid #e5e7eb;'>Name</td>
                                             <td style='border:1px solid #e5e7eb;'>{name}</td>
@@ -100,6 +100,11 @@ namespace KshatriyaSportsFoundations.API.Utilities.SendGridEmailSender
                                         <tr>
                                             <td style='font-weight:bold;border:1px solid #e5e7eb;'>Location</td>
                                             <td style='border:1px solid #e5e7eb;'>{location}</td>
+                                        </tr>
+
+                                        <tr style='background-color:#f8fafc;'>
+                                            <td style='font-weight:bold;border:1px solid #e5e7eb;vertical-align:top;'>Enquiry Message</td>
+                                            <td style='border:1px solid #e5e7eb;white-space:pre-wrap;'>{enquiryMessage}</td>
                                         </tr>
 
                                     </table>
