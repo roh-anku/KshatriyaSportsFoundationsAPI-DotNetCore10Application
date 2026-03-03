@@ -11,25 +11,19 @@ namespace KshatriyaSportsFoundations.API.Repositories.Repository
     public class ContactService : IContactService
     {
         private readonly KshatriyaSportsFoundationsDbContext _dbContext;
-        private readonly IEmailSender _emailSender;
-        private readonly IWhatsAppService _whatsAppService;
         private readonly IBackgroundTaskQueue _taskQueue;
-        private readonly IServiceProvider _serviceProvider;
+        private readonly IServiceScopeFactory _serviceScopeFactory;
         private readonly ILogger<ContactService> _logger;
 
         public ContactService(
             KshatriyaSportsFoundationsDbContext dbContext, 
-            IEmailSender emailSender, 
-            IWhatsAppService whatsAppService,
             IBackgroundTaskQueue taskQueue,
-            IServiceProvider serviceProvider,
+            IServiceScopeFactory serviceScopeFactory,
             ILogger<ContactService> logger)
         {
             _dbContext = dbContext;
-            _emailSender = emailSender;
-            _whatsAppService = whatsAppService;
             _taskQueue = taskQueue;
-            _serviceProvider = serviceProvider;
+            _serviceScopeFactory = serviceScopeFactory;
             _logger = logger;
         }
 
@@ -40,7 +34,7 @@ namespace KshatriyaSportsFoundations.API.Repositories.Repository
                 await _dbContext.Enquiries.AddAsync(sendEnquiryRequest);
                 await _dbContext.SaveChangesAsync();
 
-                _logger.LogInformation("Enquiry saved successfully for {Name}. Queuing background tasks...", sendEnquiryRequest.Name);
+                _logger.LogInformation("Enquiry saved successfully for {Name}. Queuing background task...", sendEnquiryRequest.Name);
 
                 // Capture data values to avoid ObjectDisposedException
                 var name = sendEnquiryRequest.Name;
@@ -49,39 +43,56 @@ namespace KshatriyaSportsFoundations.API.Repositories.Repository
                 var location = "Test location 1";
                 var message = sendEnquiryRequest.Message ?? "";
 
-                // Queue background tasks for email and WhatsApp
+                // Queue single background task for both email and WhatsApp
                 _taskQueue.QueueBackgroundWorkItem(async cancellationToken =>
                 {
-                    using var scope = _serviceProvider.CreateScope();
+                    using var scope = _serviceScopeFactory.CreateScope();
                     var emailSender = scope.ServiceProvider.GetRequiredService<IEmailSender>();
-                    var logger = scope.ServiceProvider.GetRequiredService<ILogger<ContactService>>();
-
-                    logger.LogInformation("Starting email send task for enquiry from {Name}", name);
-
-                    await emailSender.SendBulkEmailAsync(
-                        emailSender.GetRecipients(), 
-                        emailSender.GetSubject(), 
-                        emailSender.GetEnquiryEmailContent(name, phone, email, location, message));
-
-                    logger.LogInformation("Email send task completed for enquiry from {Name}", name);
-                });
-
-                _taskQueue.QueueBackgroundWorkItem(async cancellationToken =>
-                {
-                    using var scope = _serviceProvider.CreateScope();
                     var whatsAppService = scope.ServiceProvider.GetRequiredService<IWhatsAppService>();
                     var logger = scope.ServiceProvider.GetRequiredService<ILogger<ContactService>>();
 
-                    logger.LogInformation("Starting WhatsApp send task for enquiry from {Name}", name);
+                    try
+                    {
+                        logger.LogInformation("Starting notification tasks for enquiry from {Name}", name);
 
-                    await whatsAppService.SendBulkWhatsAppAsync(
-                        whatsAppService.GetRecipients(), 
-                        whatsAppService.GetMessage(name, phone, email, location, message));
+                        // Send email
+                        try
+                        {
+                            logger.LogInformation("Sending email for enquiry from {Name}", name);
+                            await emailSender.SendBulkEmailAsync(
+                                emailSender.GetRecipients(), 
+                                emailSender.GetSubject(), 
+                                emailSender.GetEnquiryEmailContent(name, phone, email, location, message));
+                            logger.LogInformation("Email sent successfully for enquiry from {Name}", name);
+                        }
+                        catch (Exception ex)
+                        {
+                            logger.LogError(ex, "Failed to send email for enquiry from {Name}: {Message}", name, ex.Message);
+                        }
 
-                    logger.LogInformation("WhatsApp send task completed for enquiry from {Name}", name);
+                        // Send WhatsApp
+                        try
+                        {
+                            logger.LogInformation("Sending WhatsApp message for enquiry from {Name}", name);
+                            await whatsAppService.SendBulkWhatsAppAsync(
+                                whatsAppService.GetRecipients(), 
+                                whatsAppService.GetMessage(name, phone, email, location, message));
+                            logger.LogInformation("WhatsApp sent successfully for enquiry from {Name}", name);
+                        }
+                        catch (Exception ex)
+                        {
+                            logger.LogError(ex, "Failed to send WhatsApp for enquiry from {Name}: {Message}", name, ex.Message);
+                        }
+
+                        logger.LogInformation("Notification tasks completed for enquiry from {Name}", name);
+                    }
+                    catch (Exception ex)
+                    {
+                        logger.LogError(ex, "Error in notification background task for {Name}", name);
+                    }
                 });
 
-                _logger.LogInformation("Background tasks queued successfully for {Name}", sendEnquiryRequest.Name);
+                _logger.LogInformation("Background task queued successfully for {Name}", sendEnquiryRequest.Name);
 
                 return sendEnquiryRequest;
             }
