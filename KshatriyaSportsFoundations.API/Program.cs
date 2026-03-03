@@ -2,6 +2,7 @@ using KshatriyaSportsFoundations.API.Database;
 using KshatriyaSportsFoundations.API.MappingProfiles;
 using KshatriyaSportsFoundations.API.Repositories.Interfaces;
 using KshatriyaSportsFoundations.API.Repositories.Repository;
+using KshatriyaSportsFoundations.API.Utilities.SendGridEmailSender;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -30,6 +31,11 @@ builder.Services.AddDbContext<KshatriyaSportsFoundationsDbContext>(options =>
 
 builder.Services.AddDbContext<KshatriyaSportsFoundationsAuthDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("KshatriyaSportsFoundationsAuthDbConnectionString")));
+
+//configure email and whatsapp configs
+builder.Services.Configure<SendGridSettings>(builder.Configuration.GetSection("SendGrid"));
+builder.Services.AddScoped<IEmailSender,SendGridEmailService>();
+
 
 //inject services
 builder.Services.AddScoped<IContactService, ContactService>();
