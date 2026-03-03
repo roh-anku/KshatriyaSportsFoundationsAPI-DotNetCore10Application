@@ -42,6 +42,13 @@ namespace KshatriyaSportsFoundations.API.Repositories.Repository
 
                 _logger.LogInformation("Enquiry saved successfully for {Name}. Queuing background tasks...", sendEnquiryRequest.Name);
 
+                // Capture data values to avoid ObjectDisposedException
+                var name = sendEnquiryRequest.Name;
+                var phone = sendEnquiryRequest.Phone.ToString();
+                var email = sendEnquiryRequest.Email;
+                var location = "Test location 1";
+                var message = sendEnquiryRequest.Message ?? "";
+
                 // Queue background tasks for email and WhatsApp
                 _taskQueue.QueueBackgroundWorkItem(async cancellationToken =>
                 {
@@ -49,19 +56,14 @@ namespace KshatriyaSportsFoundations.API.Repositories.Repository
                     var emailSender = scope.ServiceProvider.GetRequiredService<IEmailSender>();
                     var logger = scope.ServiceProvider.GetRequiredService<ILogger<ContactService>>();
 
-                    logger.LogInformation("Starting email send task for enquiry from {Name}", sendEnquiryRequest.Name);
+                    logger.LogInformation("Starting email send task for enquiry from {Name}", name);
 
                     await emailSender.SendBulkEmailAsync(
                         emailSender.GetRecipients(), 
                         emailSender.GetSubject(), 
-                        emailSender.GetEnquiryEmailContent(
-                            sendEnquiryRequest.Name, 
-                            sendEnquiryRequest.Phone.ToString(), 
-                            sendEnquiryRequest.Email, 
-                            "Test location 1", 
-                            sendEnquiryRequest.Message ?? ""));
+                        emailSender.GetEnquiryEmailContent(name, phone, email, location, message));
 
-                    logger.LogInformation("Email send task completed for enquiry from {Name}", sendEnquiryRequest.Name);
+                    logger.LogInformation("Email send task completed for enquiry from {Name}", name);
                 });
 
                 _taskQueue.QueueBackgroundWorkItem(async cancellationToken =>
@@ -70,18 +72,13 @@ namespace KshatriyaSportsFoundations.API.Repositories.Repository
                     var whatsAppService = scope.ServiceProvider.GetRequiredService<IWhatsAppService>();
                     var logger = scope.ServiceProvider.GetRequiredService<ILogger<ContactService>>();
 
-                    logger.LogInformation("Starting WhatsApp send task for enquiry from {Name}", sendEnquiryRequest.Name);
+                    logger.LogInformation("Starting WhatsApp send task for enquiry from {Name}", name);
 
                     await whatsAppService.SendBulkWhatsAppAsync(
                         whatsAppService.GetRecipients(), 
-                        whatsAppService.GetMessage(
-                            sendEnquiryRequest.Name, 
-                            sendEnquiryRequest.Phone.ToString(), 
-                            sendEnquiryRequest.Email, 
-                            "Test location 1", 
-                            sendEnquiryRequest.Message ?? ""));
+                        whatsAppService.GetMessage(name, phone, email, location, message));
 
-                    logger.LogInformation("WhatsApp send task completed for enquiry from {Name}", sendEnquiryRequest.Name);
+                    logger.LogInformation("WhatsApp send task completed for enquiry from {Name}", name);
                 });
 
                 _logger.LogInformation("Background tasks queued successfully for {Name}", sendEnquiryRequest.Name);
