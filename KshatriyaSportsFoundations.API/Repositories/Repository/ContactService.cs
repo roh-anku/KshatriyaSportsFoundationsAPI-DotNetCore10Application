@@ -24,7 +24,7 @@ namespace KshatriyaSportsFoundations.API.Repositories.Repository
                 await _dbContext.SaveChangesAsync();
 
                 //send email
-                await _emailSender.SendBulkEmailAsync(_emailSender.GetRecipients(),_emailSender.GetSubject(),_emailSender.GetEnquiryEmailContent(sendEnquiryRequest.Name,sendEnquiryRequest.Phone.ToString(), sendEnquiryRequest.Email,"Location 1"));
+                await _emailSender.SendBulkEmailAsync(_emailSender.GetRecipients(),_emailSender.GetSubject(),_emailSender.GetEnquiryEmailContent(sendEnquiryRequest.Name,sendEnquiryRequest.Phone.ToString(), sendEnquiryRequest.Email,"Location 1"),sendEnquiryRequest.Message);
 
                 return sendEnquiryRequest;
             }
