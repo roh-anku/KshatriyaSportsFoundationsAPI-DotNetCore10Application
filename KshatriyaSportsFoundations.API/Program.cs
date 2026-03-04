@@ -13,23 +13,33 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Logging.ClearProviders();
+
+builder.Logging.AddConsole();
+builder.Logging.AddDebug();
+builder.Logging.AddAzureWebAppDiagnostics();
+
+builder.Logging.SetMinimumLevel(LogLevel.Information); ;
 
 string policyName = "AllowReactOnly";
-builder.Services.AddCors(options => {
+
+builder.Services.AddCors(options =>
+{
     options.AddPolicy(policyName, policy =>
     {
-        policy.WithOrigins("http://localhost:5173", "https://www.kshatriyataekwondo.in")
-        .AllowAnyMethod()
-        .AllowAnyHeader();
+        policy.WithOrigins(
+                "http://localhost:5173",
+                "https://www.kshatriyataekwondo.in",
+                "https://kshatriyataekwondo.in"
+            )
+            .AllowAnyHeader()
+            .AllowAnyMethod();
     });
 });
 
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
-
-builder.Services.AddApplicationInsightsTelemetry();
-builder.Logging.SetMinimumLevel(LogLevel.Information);
 
 //inject DB connection strings
 builder.Services.AddDbContext<KshatriyaSportsFoundationsDbContext>(options =>

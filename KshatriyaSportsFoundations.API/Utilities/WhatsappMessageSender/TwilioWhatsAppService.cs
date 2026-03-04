@@ -100,6 +100,7 @@ namespace KshatriyaSportsFoundations.API.Utilities.WhatsappMessageSender
 📅 *Received On:* {DateTime.Now:dd MMM yyyy hh:mm tt}
 
 🔥 Please respond to the enquiry as soon as possible.
+
 """;
             return whatsappMessage;
         }
