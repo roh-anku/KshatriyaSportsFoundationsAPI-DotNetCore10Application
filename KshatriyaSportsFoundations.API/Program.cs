@@ -103,11 +103,18 @@ var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {
-    var db = scope.ServiceProvider.GetRequiredService<KshatriyaSportsFoundationsDbContext>();
-    db.Database.Migrate();
+    try
+    {
+        var db = scope.ServiceProvider.GetRequiredService<KshatriyaSportsFoundationsDbContext>();
+        db.Database.Migrate();
 
-    var db1 = scope.ServiceProvider.GetRequiredService<KshatriyaSportsFoundationsAuthDbContext>();
-    db1.Database.Migrate();
+        var db1 = scope.ServiceProvider.GetRequiredService<KshatriyaSportsFoundationsAuthDbContext>();
+        db1.Database.Migrate();
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine("Database migration failed: " + ex.Message);
+    }
 }
 
 // Configure the HTTP request pipeline.
