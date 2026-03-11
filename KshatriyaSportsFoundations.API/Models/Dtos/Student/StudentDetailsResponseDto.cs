@@ -11,5 +11,6 @@
         public bool Fullfilled { get; set; }
         public DateTime? RegistrationDate { get; set; }
         public bool? IsChanged { get; set; }
+        public string? Location { get; set; }
     }
 }

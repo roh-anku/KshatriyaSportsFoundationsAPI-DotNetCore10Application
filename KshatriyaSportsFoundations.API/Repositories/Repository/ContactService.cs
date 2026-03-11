@@ -40,7 +40,7 @@ namespace KshatriyaSportsFoundations.API.Repositories.Repository
                 var name = sendEnquiryRequest.Name;
                 var phone = sendEnquiryRequest.Phone.ToString();
                 var email = sendEnquiryRequest.Email;
-                var location = "Test location 1";
+                var location = sendEnquiryRequest.Location ?? "";
                 var message = sendEnquiryRequest.Message ?? "";
 
                 // Queue single background task for both email and WhatsApp

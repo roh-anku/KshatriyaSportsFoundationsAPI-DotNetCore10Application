@@ -13,5 +13,6 @@ namespace KshatriyaSportsFoundations.API.Models.Domain
         public string? AdminComments { get; set; }
         public bool Fullfilled { get; set; }
         public DateTime? RegistrationDate { get; set; }
+        public string? Location { get; set; }
     }
 }
