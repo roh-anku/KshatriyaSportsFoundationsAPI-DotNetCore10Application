@@ -15,5 +15,6 @@ namespace KshatriyaSportsFoundations.API.Models.Dtos.Contact
         public long Phone { get; set; }
 
         public string? Message { get; set; }
+        public string? Location { get; set; }
     }
 }
