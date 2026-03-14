@@ -19,7 +19,7 @@ builder.Logging.AddConsole();
 builder.Logging.AddDebug();
 builder.Logging.AddAzureWebAppDiagnostics();
 
-builder.Logging.SetMinimumLevel(LogLevel.Information); ;
+builder.Logging.SetMinimumLevel(LogLevel.Information);
 
 string policyName = "AllowReactOnly";
 
@@ -47,6 +47,14 @@ builder.Services.AddDbContext<KshatriyaSportsFoundationsDbContext>(options =>
 
 builder.Services.AddDbContext<KshatriyaSportsFoundationsAuthDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("KshatriyaSportsFoundationsAuthDbConnectionString")));
+
+//add redis configuration
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = builder.Configuration.GetConnectionString("Redis");
+    options.InstanceName = "ksf-redis";
+});
+//now, redis is registered as IDistributedCache
 
 //configure email and whatsapp configs
 builder.Services.Configure<SendGridSettings>(builder.Configuration.GetSection("SendGrid"));
