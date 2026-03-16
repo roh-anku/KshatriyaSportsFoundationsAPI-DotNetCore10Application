@@ -31,8 +31,9 @@ namespace KshatriyaSportsFoundations.API.Repositories.Repository
         {
             try
             {
-                await _dbContext.Enquiries.AddAsync(sendEnquiryRequest);
-                await _dbContext.SaveChangesAsync();
+                //disabling database saves- due to budgeting issue,at the moment
+                //await _dbContext.Enquiries.AddAsync(sendEnquiryRequest);
+                //await _dbContext.SaveChangesAsync();
 
                 _logger.LogInformation("Enquiry saved successfully for {Name}. Queuing background task...", sendEnquiryRequest.Name);
 
